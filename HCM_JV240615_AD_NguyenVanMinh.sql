@@ -185,7 +185,7 @@ where year(start_date) = 2023;
 update class_room as cr
 set cr.total_student = (select count(*) from student as s where s.class_room_id = cr.id);
 
--- # Tạo View v_getStudentInfo thực hiện lấy ra danh sách Student gồm: Id, Name,
+-- # 5. Tạo View v_getStudentInfo thực hiện lấy ra danh sách Student gồm: Id, Name,
 -- # Email, Phone, Address, Gender, BirthDay, ClassName, MarksAvg, Trong đó cột
 -- # MarksAvg hiển thị như sau:
 -- # 0 < MarksAvg <=5 Loại Yếu
@@ -214,6 +214,21 @@ from student
          left join
      mark ON student.id = mark.student_id
 group by student.id;
+
+
+-- 6. View v_getStudentMax hiển thị danh sách Sinh viên có điểm trung bình >= 7.5
+create view v_getStudentMax as
+select
+    s.id       	as Id,
+    s.name     	as Name,
+    s.email    	as Email,
+    s.phone    	as Phone,
+    s.gender   	as Gender,
+    s.birthday 	as Birthday
+from student as s
+         join mark as m on s.id = m.student_id
+group by s.id
+having AVG(m.score) >= 7.5;
 
 -- 7. Tạo thủ tục thêm mới dữ liệu vào bảng class_room
 
